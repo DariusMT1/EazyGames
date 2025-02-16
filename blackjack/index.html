@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blackjack Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Blackjack Game</h1>
+        <div id="setup">
+            <label for="money">Enter your starting money:</label>
+            <input type="number" id="money" min="1" value="100">
+            <label for="currency">Select your currency:</label>
+            <select id="currency">
+                <option value="USD">$ (Dollar)</option>
+                <option value="EUR">€ (Euro)</option>
+                <option value="RON">lei (Lei/Ron)</option>
+                <option value="JPY">¥ (Japanese Yen)</option>
+                <option value="CHF">CHF (Swiss Franc)</option>
+                <option value="GBP">£ (Pounds)</option>
+            </select>
+            <button id="start-game">Start Game</button>
+        </div>
+        <div id="game" style="display: none;">
+            <div id="dealer">
+                <h2>Dealer's Hand</h2>
+                <div id="dealer-cards" class="cards"></div>
+                <div id="dealer-score" class="score"></div>
+            </div>
+            <div id="player">
+                <h2>Your Hand</h2>
+                <div id="player-cards" class="cards"></div>
+                <div id="player-score" class="score"></div>
+            </div>
+            <div id="controls">
+                <button id="hit">Hit</button>
+                <button id="stand">Stand</button>
+                <button id="restart">Restart</button>
+            </div>
+            <div id="message"></div>
+            <div id="player-money"></div>
+        </div>
+        <div id="rules">
+            <h2>How to Play Blackjack</h2>
+            <p>Blackjack is a popular card game played in casinos. The goal of the game is to beat the dealer's hand without going over 21.</p>
+            <h3>Rules:</h3>
+            <ul>
+                <li>Each player starts with two cards, and the dealer also gets two cards, with one card face up and one face down.</li>
+                <li>Cards 2 through 10 are worth their face value. Face cards (J, Q, K) are worth 10 points. Aces can be worth 1 or 11 points.</li>
+                <li>Players can choose to "Hit" to take another card or "Stand" to keep their current hand.</li>
+                <li>If a player's hand exceeds 21 points, they "bust" and lose the game.</li>
+                <li>After all players have finished their turns, the dealer reveals their face-down card and must hit until their total is 17 or higher.</li>
+                <li>If the dealer busts, all remaining players win. If the dealer does not bust, the player with the highest hand value that does not exceed 21 wins.</li>
+                <li>If the player and dealer have the same hand value, it is a "push" and the player gets their bet back.</li>
+            </ul>
+            <h3>How to Play:</h3>
+            <ul>
+                <li>Click "Hit" to take another card.</li>
+                <li>Click "Stand" to keep your current hand and end your turn.</li>
+                <li>Click "Restart" to start a new game.</li>
+            </ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

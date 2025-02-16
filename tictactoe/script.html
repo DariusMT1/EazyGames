@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --primary-color: #007bff;
+            --cell-color: #ffffff;
+            --text-color: #000000;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .theme-buttons {
+            margin-bottom: 20px;
+        }
+
+        .theme-button {
+            margin: 5px;
+            padding: 10px 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .theme-button:hover {
+            opacity: 0.9;
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+        }
+
+        .cell {
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            background-color: var(--cell-color);
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cell.taken {
+            pointer-events: none;
+        }
+
+        .info {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .reset {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .reset:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-buttons">
+        <button class="theme-button" onclick="setTheme(1)">Theme 1</button>
+        <button class="theme-button" onclick="setTheme(2)">Theme 2</button>
+        <button class="theme-button" onclick="setTheme(3)">Theme 3</button>
+        <button class="theme-button" onclick="setTheme(4)">Theme 4</button>
+        <button class="theme-button" onclick="setTheme(5)">Theme 5</button>
+    </div>
+
+    <div>
+        <div class="board" id="board"></div>
+        <div class="info">
+            <p id="message">Player X's turn</p>
+            <button class="reset" id="resetButton">Reset Game</button>
+        </div>
+    </div>
+
+    <script>
+        const boardElement = document.getElementById('board');
+        const messageElement = document.getElementById('message');
+        const resetButton = document.getElementById('resetButton');
+
+        let board = Array(9).fill(null);
+        let currentPlayer = 'X';
+
+        const themes = [
+            { bg: '#f4f4f9', primary: '#007bff', cell: '#ffffff', text: '#000000' },
+            { bg: '#282c34', primary: '#61dafb', cell: '#3a3f47', text: '#ffffff' },
+            { bg: '#ffe4e1', primary: '#ff69b4', cell: '#fffafa', text: '#000000' },
+            { bg: '#e8f5e9', primary: '#4caf50', cell: '#ffffff', text: '#000000' },
+            { bg: '#fff8e1', primary: '#ffb300', cell: '#ffffff', text: '#000000' }
+        ];
+
+        function setTheme(themeIndex) {
+            const theme = themes[themeIndex - 1];
+            document.documentElement.style.setProperty('--bg-color', theme.bg);
+            document.documentElement.style.setProperty('--primary-color', theme.primary);
+            document.documentElement.style.setProperty('--cell-color', theme.cell);
+            document.documentElement.style.setProperty('--text-color', theme.text);
+        }
+
+        function createBoard() {
+            boardElement.innerHTML = '';
+            board.forEach((cell, index) => {
+                const cellElement = document.createElement('div');
+                cellElement.classList.add('cell');
+                cellElement.dataset.index = index;
+                cellElement.textContent = cell;
+                cellElement.addEventListener('click', handleCellClick);
+                boardElement.appendChild(cellElement);
+            });
+        }
+
+        function handleCellClick(event) {
+            const index = event.target.dataset.index;
+
+            if (board[index] || checkWinner()) {
+                return;
+            }
+
+            board[index] = currentPlayer;
+            event.target.textContent = currentPlayer;
+            event.target.classList.add('taken');
+
+            if (checkWinner()) {
+                messageElement.textContent = `Player ${currentPlayer} wins!`;
+                displayWinnerNotification();
+                return;
+            }
+
+            if (board.every(cell => cell)) {
+                removeRandomCells(3);
+            }
+
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            messageElement.textContent = `Player ${currentPlayer}'s turn`;
+        }
+
+        function checkWinner() {
+            const winningCombinations = [
+                [0, 1, 2], [3, 4, 5], [6, 7, 8],
+                [0, 3, 6], [1, 4, 7], [2, 5, 8],
+                [0, 4, 8], [2, 4, 6]
+            ];
+
+            return winningCombinations.some(combination => {
+                const [a, b, c] = combination;
+                return board[a] && board[a] === board[b] && board[a] === board[c];
+            });
+        }
+
+        function displayWinnerNotification() {
+            setTimeout(() => {
+                alert("The loser has to do anything the winner says 😈😈");
+            }, 100);
+        }
+
+        function removeRandomCells(count) {
+            const filledIndexes = board
+                .map((value, index) => (value ? index : null))
+                .filter(index => index !== null);
+
+            const randomIndexes = [];
+            while (randomIndexes.length < count && filledIndexes.length > 0) {
+                const randomIndex = Math.floor(Math.random() * filledIndexes.length);
+                randomIndexes.push(filledIndexes.splice(randomIndex, 1)[0]);
+            }
+
+            randomIndexes.forEach(index => {
+                board[index] = null;
+                const cellElement = boardElement.querySelector(`.cell[data-index='${index}']`);
+                cellElement.textContent = '';
+                cellElement.classList.remove('taken');
+            });
+        }
+
+        resetButton.addEventListener('click', () => {
+            board = Array(9).fill(null);
+            currentPlayer = 'X';
+            messageElement.textContent = "Player X's turn";
+            createBoard();
+        });
+
+        createBoard();
+    </script>
+</body>
+</html>
