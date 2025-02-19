@@ -79,7 +79,7 @@ Sh <br />
 Apply code <br />
 Insert in terminal <br />
 
-git clone https://github.com/DariusMT!/EazyGames.git <br />
+git clone https://github.com/DariusMT1/EazyGames.git <br />
 cd EazyGames <br />
 Run the desired game: <br />
 
